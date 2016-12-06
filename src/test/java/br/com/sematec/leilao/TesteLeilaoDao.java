@@ -109,6 +109,7 @@ public class TesteLeilaoDao {
 		assertEquals(0,total);
 	}
 	
+	@Test
 	public void deveTrazerSomenteLeiloesHaMaisDe7Dias(){
 		Leilao noLimite = xbox;
 		Calendar seteDiasAtras = Calendar.getInstance();
@@ -124,6 +125,22 @@ public class TesteLeilaoDao {
 		assertEquals(1,antigos.size());
 	}
 	
-	
+	@Test
+	public void deveTrazerLeiloesEncerradosNoPeriodo(){
+		Calendar comecoDoIntervalo = Calendar.getInstance();
+		Calendar fimDoIntervalo = Calendar.getInstance();
+		Calendar fora = Calendar.getInstance();
+		fora.add(Calendar.DAY_OF_MONTH, -7);
+		
+		usuarioDao.salvar(usuario);
+		leilaoDao.salvar(geladeira);
+		leilaoDao.salvar(xbox);
+		
+		xbox.setDataAbertura(comecoDoIntervalo);
+		geladeira.setDataAbertura(fora);
+		List<Leilao> leiloes = leilaoDao.porPeriodo(comecoDoIntervalo,fimDoIntervalo);
+		assertEquals(1, leiloes.size());
+		assertEquals("XBOX",leiloes.get(0).getNome());
+	}
 	
 }
