@@ -13,6 +13,7 @@ import org.junit.Test;
 import br.com.sematec.leilao.dao.CriadorDeSessao;
 import br.com.sematec.leilao.dao.LeilaoDao;
 import br.com.sematec.leilao.dao.UsuarioDao;
+import br.com.sematec.leilao.dominio.Lance;
 import br.com.sematec.leilao.dominio.Leilao;
 import br.com.sematec.leilao.dominio.Usuario;
 
@@ -139,6 +140,26 @@ public class TesteLeilaoDao {
 		xbox.setDataAbertura(comecoDoIntervalo);
 		geladeira.setDataAbertura(fora);
 		List<Leilao> leiloes = leilaoDao.porPeriodo(comecoDoIntervalo,fimDoIntervalo);
+		assertEquals(1, leiloes.size());
+		assertEquals("XBOX",leiloes.get(0).getNome());
+	}
+	
+	
+	@Test
+	public void deveRetornarLeiloesDisputados(){
+		Leilao naoDisputado = geladeira;
+		Leilao disputado = xbox;
+		
+		Lance lance1 = new Lance(Calendar.getInstance(),usuario,2600,disputado);
+		disputado.adicionaLance(lance1);
+		
+		Lance lance2 = new Lance(Calendar.getInstance(),usuario,2000,naoDisputado);
+		naoDisputado.adicionaLance(lance2);
+			
+		leilaoDao.salvar(disputado);
+		leilaoDao.salvar(naoDisputado);
+		
+		List<Leilao> leiloes = leilaoDao.disputadosEntre(2500, 3500);
 		assertEquals(1, leiloes.size());
 		assertEquals("XBOX",leiloes.get(0).getNome());
 	}

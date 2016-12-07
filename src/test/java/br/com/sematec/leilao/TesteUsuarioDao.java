@@ -74,4 +74,6 @@ public class TesteUsuarioDao {
 		Usuario usuarioDoBanco = usuarioDao.porNomeEEmail("usuarioTeste", "usuario@teste.com.br");
 		assertNull(usuarioDoBanco);
 	}
+	
+
 }
